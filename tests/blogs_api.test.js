@@ -55,6 +55,23 @@ describe('addition of a new blog', () => {
   })
 })
 
+test('miss like property', async() => {
+  const newBlog = {
+    title: 'First class tests',
+    author: 'Robert C. Martin',
+    url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(201)
+
+  const blogs = await Blog.find({})
+
+  expect(blogs[2].likes).toBe(0)
+})
+
 test('amount of blog posts', async() => {
   const response = await api.get('/api/blogs')
   expect(response.body).toHaveLength(initialBlogs.length)
@@ -65,6 +82,24 @@ test('blog id ', async() => {
 
   const identId = response.body.map(item => item.id)
   expect(identId).toBeDefined()
+})
+
+test('status code 400 if data invalid', async() => {
+  const newBlog = {
+    author: 'Edsger W. Dijkstra',
+    likes: 3
+  }
+
+  await api 
+    .post('/api/blogs')
+    .send(newBlog)
+    .expect(400)
+    
+
+  const blogs = await Blog.find({})
+  const blogsAtEnd = blogs.map(item => item)
+
+  expect(blogsAtEnd).toHaveLength(initialBlogs.length)
 })
 
 

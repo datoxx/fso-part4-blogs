@@ -22,11 +22,7 @@ const initialBlogs = [
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  let blogObject = new Blog(initialBlogs[0])
-  await blogObject.save()
-
-  blogObject = new Blog(initialBlogs[1])
-  await blogObject.save()
+  await Blog.insertMany(initialBlogs)
 })
 
 test('blog are returned as json', async() => {
@@ -34,7 +30,35 @@ test('blog are returned as json', async() => {
     .get('/api/blogs')
     .expect(200)
     .expect('Content-Type', /application\/json/)
-}, 100000)
+})
+
+describe('addition of a new blog', () => {
+  test('add new blog', async() => {
+    const newBlog = {
+      title: 'First class tests',
+      author: 'Robert C. Martin',
+      url: 'http://blog.cleancoder.com/uncle-bob/2017/05/05/TestDefinitions.htmll',
+      likes: 10
+    }
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    const title = response.body.map(item => item.title)
+
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    expect(title).toContain('First class tests')
+  })
+})
+
+test('amount of blog posts', async() => {
+  const response = await api.get('/api/blogs')
+  expect(response.body).toHaveLength(initialBlogs.length)
+})
 
 test('blog id ', async() => {
   const response = await api.get('/api/blogs')
@@ -43,12 +67,6 @@ test('blog id ', async() => {
   expect(identId).toBeDefined()
 })
 
-
-
-test('amount of blog posts', async() => {
-  const response = await api.get('/api/blogs')
-  expect(response.body).toHaveLength(initialBlogs.length)
-})
 
 afterAll(() => {
   mongoose.connection.close()

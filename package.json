@@ -4,10 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
     "lint": "eslint .",
-    "test": "jest --verbose"
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "repository": {
     "type": "git",
@@ -21,6 +21,7 @@
   "homepage": "https://github.com/datoxx/fso-part4-blogs#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
     "mongoose": "^6.1.7"
@@ -28,9 +29,7 @@
   "devDependencies": {
     "eslint": "^8.7.0",
     "jest": "^27.4.7",
-    "nodemon": "^2.0.15"
-  },
-  "jest": {
-    "testEnvironment": "node"
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
   }
 }

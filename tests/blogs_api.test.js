@@ -32,6 +32,20 @@ describe('return blogs', () => {
     const identId = response.body.map(item => item.id)
     expect(identId).toBeDefined()
   })
+
+  test('succeeds with a valid id', async() => {
+    const blogs = await Blog.find({})
+    const blogToView = blogs[0]
+
+    const resultBlog = await api
+      .get(`/api/blogs/${blogToView.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const processedBlogToView = JSON.parse(JSON.stringify(blogToView))
+
+    expect(resultBlog.body).toEqual(processedBlogToView)
+  })
 })
 
 
@@ -86,28 +100,25 @@ describe('addition of a new blog', () => {
       .expect(400)
     
     const blogs = await Blog.find({})
-    const blogsAtEnd = blogs.map(item => item)
 
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+    expect(blogs).toHaveLength(helper.initialBlogs.length)
   })
 })
 
 describe('deletion of a blog', () => {
   test('succeeds with status code 204 if id is valid', async() => {
     const blogs = await Blog.find({})
-    const blogAtStart = blogs.map(item => item)
-    const blogToDelete = blogAtStart[0]
+    const blogToDelete = blogs[0]
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
       .expect(204)
 
     const newBlogs= await Blog.find({})
-    const blogAtEnd = newBlogs.map(item => item)
 
-    expect(blogAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+    expect(newBlogs).toHaveLength(helper.initialBlogs.length - 1)
 
-    const title = blogAtEnd.map(item => item.title)
+    const title = newBlogs.map(item => item.title)
 
     expect(title).not.toContain(blogToDelete.title)
 

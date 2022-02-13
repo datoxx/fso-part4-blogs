@@ -1,30 +1,39 @@
 /* eslint-disable linebreak-style */
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+
+
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog.find({}).populate('user', {blogs : 0})
   response.json(blogs)
 })
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
 
+  if(body.title === undefined || body.url === undefined) {
+    return response.status(400).json({error: 'blog is invalid'})
+  } 
+
+  const user = await User.findOne({})
+
   const blog = new Blog({
     title: body.title,
     author: body.author,
     url: body.url,
-    likes: body.likes === undefined ? 0 : body.likes
+    likes: body.likes === undefined ? 0 : body.likes,
+    user: user.id,
   })
 
-  
-  if(blog.title === undefined || blog.url === undefined) {
-    return response.status(400).json({error: 'blog is invalid'})
-  } 
-
   const saveBlog = await blog.save()
+
+  user.blogs = user.blogs.concat(saveBlog.id)
+  await user.save()
+
   response.status(201).json(saveBlog)
-  
 })
 
 blogsRouter.get('/:id', async(request, response) => {

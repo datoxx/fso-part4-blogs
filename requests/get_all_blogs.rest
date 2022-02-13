@@ -6,23 +6,8 @@ POST http://localhost:3003/api/blogs
 content-type: application/json
 
 {
-  "title": "first blog",
-  "author": "dato",
-  "url": "http://localhost:3003/api/blogs",
-  "likes": "232"
-}
-
-###
-
-GET http://localhost:3003/api/users
-
-###
-
-POST http://localhost:3003/api/users
-content-type: application/json
-
-{
-  "username": "bela1",
-  "name": "lela",
-  "password": "123333"
+  "title": "blog",
+  "author": "jama",
+  "url": "http://localhost:3003/api/blog",
+  "likes": "32"
 }

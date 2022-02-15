@@ -22,7 +22,10 @@ blogsRouter.post('/', async (request, response) => {
   } 
 
   const token = request.token
-  
+  if (!token) {
+    return response.status(401).json({ error: 'You are not authenticated!' })
+  }
+
   const decodedToken = jwt.verify(token, process.env.SECRET)
   if(!decodedToken.id) {
     return response.status(401).json({error: 'token missing or invalid'})
@@ -36,7 +39,7 @@ blogsRouter.post('/', async (request, response) => {
     author: body.author,
     url: body.url,
     likes: body.likes === undefined ? 0 : body.likes,
-    user: user.id,
+    user: user.id
   })
 
   const saveBlog = await blog.save()

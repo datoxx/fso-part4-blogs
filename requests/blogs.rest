@@ -1,10 +1,10 @@
 POST http://localhost:3003/api/blogs
 content-type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhdG8iLCJpZCI6IjYyMGJlMzNjNDQwN2RmNjQ1Njg2M2RhNiIsImlhdCI6MTY0NDk0NjI0Mn0.enxbVDSV6pOBMB7jBnAovdw7zZCGrbbP-70SHAY536Y
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imlub21hIiwiaWQiOiI2MjBjZThhYWJiNDJhZTNhMmU2NGIzOWQiLCJpYXQiOjE2NDUwMTMxNjh9.Oa_PKdpUzNufuBIlPjcEtm08-WNexx2Q142SkM2TXaU
 
 {
-  "title": "blog90",
-  "author": "dato50",
-  "url": "http://localhost:3003/api/",
-  "likes": "4"
+  "title": "blog7777",
+  "author": "inoma500",
+  "url": "http://localhost:3003/api/blogs",
+  "likes": "77002"
 }

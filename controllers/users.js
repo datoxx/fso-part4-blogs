@@ -7,6 +7,14 @@ const User = require('../models/user')
 usersRouter.post('/', async (request, response) => {
   const body = request.body
 
+ 
+  const users = await User.find({})
+  const usernames = users.some(user => user.username === body.username)
+
+  if(usernames) {
+    return response.status(400).json({error: ' username is exist'})
+  }
+
   if(!body.password || body.password.length < 3) {
     return response.status(400).json({error: 'missing username or password'})
   }
